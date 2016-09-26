@@ -1,0 +1,15 @@
+{
+    "name": "acquia/simplesaml-blt",
+    "description": "A helper package to include simplesamlphp in Blted projects.",
+    "type": "project",
+    "require": {
+        "drupal/simplesamlphp_auth": "8.3.x-dev"
+    },
+    "authors": [
+        {
+            "name": "dooleymatt",
+            "email": "matt.dooley@acquia.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}

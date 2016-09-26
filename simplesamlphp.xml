@@ -1,0 +1,94 @@
+<project name="simplesamlphp" default="simplesamlphp:htaccess">
+
+    <target name="simplesamlphp:install" description="Installs simplesamlphp library and modules.">
+        <phingcall target="simplesamlphp:htaccess"/>
+    </target>
+
+    <target name="simplesamlphp:symlink" description="Creates a symbolic link to the web accessible directory in the simplesamlphp library">
+        <echo>Creating a symbolic link from ${docroot}/simplesaml to web accessible directory in the simplesamlphp library</echo>
+        <symlink target="${repo.root}/simplesamlphp/www" link="${docroot}/simplesaml" />
+    </target>
+
+    <target name="simplesamlphp:htaccess" description="Manual changes that must be done.">
+    <echo>
+     ******************************************************************************
+     ******************************************************************************
+     *****                                                                    *****
+     *****      Manual configuration needed to complete the installation.     *****
+     *****                                                                    *****
+     ******************************************************************************
+     ******************************************************************************
+
+      To complete the setup you must manually modify your .htaccess file by adding
+      the 2 lines with the + signs in the snippet below.
+    </echo>
+    <echo>
+
+      # Copy and adapt this rule to directly execute PHP files in contributed or
+      # custom modules or to run another PHP application in the same directory.
+      RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
+    + # Allow access to simplesaml paths
+    + RewriteCond %{REQUEST_URI} !^/simplesaml
+      # Deny access to any other PHP files that do not match the rules above.
+      RewriteRule "^.+/.*\.php$" - [F]
+
+    </echo>
+    </target>
+
+    <!--<target name="simplesamlphp:config" description="Copies config template files to the appropriate place in simplesamlphp library.">
+        <echo>Copying config template files to the appropriate place in simplesamlphp library.</echo>
+        <copy file="${repo.root}/simplesamlphp/metadata-templates/saml20-idp-remote.php" tofile="${repo.root}/simplesamlphp/metadata/saml20-idp-remote.php" overwrite="false"/>
+        <copy file="${repo.root}/simplesamlphp/config-templates/config.php" tofile="${repo.root}/simplesamlphp/config/config.php" overwrite="false"/>
+        <exec dir="${repo.root}/simplesamlphp/config" command="curl https://gist.githubusercontent.com/acquialibrary/8059715/raw/a6dc376bfb5068a2c7fe01be315d13bd47d4c10b/9191_config.php > acquia_config.php" outputProperty="config_contents" passthru="true"/>
+
+        <append destFile="${repo.root}/simplesamlphp/config/config.php" file="${repo.root}/simplesamlphp/config/acquia_config.php">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern=".*php\n" replace="" ignoreCase="true"/>
+                </replaceregexp>
+            </filterchain>
+        </append>
+
+
+        <copy file="${repo.root}/simplesamlphp/config-templates/authsources.php" tofile="${repo.root}/simplesamlphp/config/authsources.php" overwrite="true"/>
+    </target>
+
+    <target name="simplesamlphp:settings" description="Creates a simplesaml.settings.php file in your settings directory.">
+        <echo>Creating a simplesamlphp.settings.php file.</echo>
+      <copy file="${repo.root}/vendor/acquia/simplesamlphp/simplesamlphp/settings/simplesamlphp.settings.php" tofile="${docroot}/sites/default/settings/simplesamlphp.settings.php"/>
+    </target>-->
+
+  <!-- Add description -->
+  <target name="simplesamlphp:config" description="Copies config template files to the appropriate place in simplesamlphp library.">
+    <echo>Copying config files to the appropriate place in simplesamlphp library.</echo>
+    <copy file="${repo.root}/simplesamlphp/config/config.php" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/config/config.php" overwrite="true"/>
+    <copy file="${repo.root}/simplesamlphp/config/authsources.php" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/config/authsources.php" overwrite="true"/>
+    <copy file="${repo.root}/simplesamlphp/metadata/saml20-idp-remote.php" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php" overwrite="true"/>
+    <copy file="${repo.root}/vendor/acquia/simplesamlphp/gitignore.txt" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/.gitignore" overwrite="true"/>
+  </target>
+
+  <target name="deploy:build" description="Overrides Generates a deploy-ready build in deploy.dir."
+          depends="frontend, deploy:copy, deploy:composer:install, deploy:sanitize">
+    <phingcall target="simplesamlphp:config"/>
+    <!-- If we are using ACSF, run the ACSF Deploy command. -->
+    <if>
+      <equals arg1="${hosting}" arg2="acsf"/>
+      <then>
+        <phingcall target="deploy:acsf:init"/>
+      </then>
+    </if>
+  </target>
+
+  <target name="setup:build" description="Overrides Generates all required files for a full build. E.g., (re)builds docroot, etc."
+          depends="setup:git-hooks, setup:drupal:settings, setup:behat, setup:composer:install, frontend">
+
+    <phingcall target="simplesamlphp:config"/>
+    <phingcall target="target-hook:invoke">
+      <property name="hook-name" value="post-setup-build"/>
+    </phingcall>
+
+  </target>
+
+
+</project>
+
