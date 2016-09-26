@@ -1,5 +1,5 @@
 {
-    "name": "acquia/simplesaml-blt",
+    "name": "acquia/blt-simplesamlphp",
     "description": "A helper package to include simplesamlphp in Blted projects.",
     "type": "project",
     "require": {
