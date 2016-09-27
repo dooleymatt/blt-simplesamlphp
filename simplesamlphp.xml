@@ -41,7 +41,7 @@
     <copy file="${repo.root}/simplesamlphp/config/config.php" tofile="${repo.root}/deploy/vendor/simplesamlphp/simplesamlphp/config/config.php" overwrite="true"/>
     <copy file="${repo.root}/simplesamlphp/config/authsources.php" tofile="${repo.root}/deploy/vendor/simplesamlphp/simplesamlphp/config/authsources.php" overwrite="true"/>
     <copy file="${repo.root}/simplesamlphp/metadata/saml20-idp-remote.php" tofile="${repo.root}/deploy/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php" overwrite="true"/>
-    <copy file="${repo.root}/vendor/acquia/simplesamlphp/gitignore.txt" tofile="${repo.root}/deploy/vendor/simplesamlphp/simplesamlphp/.gitignore" overwrite="true"/>
+    <copy file="${repo.root}/vendor/acquia/blt-simplesamlphp/gitignore.txt" tofile="${repo.root}/deploy/vendor/simplesamlphp/simplesamlphp/.gitignore" overwrite="true"/>
   </target>
 
   <target name="simplesamlphp:build:config" description="Copies config template files to the appropriate place in simplesamlphp library.">
@@ -49,7 +49,7 @@
     <copy file="${repo.root}/simplesamlphp/config/config.php" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/config/config.php" overwrite="true"/>
     <copy file="${repo.root}/simplesamlphp/config/authsources.php" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/config/authsources.php" overwrite="true"/>
     <copy file="${repo.root}/simplesamlphp/metadata/saml20-idp-remote.php" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php" overwrite="true"/>
-    <copy file="${repo.root}/vendor/acquia/simplesamlphp/gitignore.txt" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/.gitignore" overwrite="true"/>
+    <copy file="${repo.root}/vendor/acquia/blt-simplesamlphp/gitignore.txt" tofile="${repo.root}/vendor/simplesamlphp/simplesamlphp/.gitignore" overwrite="true"/>
   </target>
 
   <target name="deploy:build" description="Overrides Generates a deploy-ready build in deploy.dir."
